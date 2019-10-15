@@ -1,5 +1,5 @@
 -module(proyecto2).
--export([push/2,pop/1,p26/2,carte/1,k_esimo/2,random/2,generarlista/2]).
+-export([push/2,pop/1,carte/1,k_esimo/2,random/2,generarlista/2,longitud/1]).
 
 
 push(X,L)->[X|L].
@@ -21,7 +21,8 @@ random(_L,0)->[];
 random(L,K)->Rand = k_esimo(L,round(rand:uniform()*(length(L)-1))), 
             [Rand|random(L--[Rand],K-1)].
 
-
+longitud([])->0;
+longitud([_H|T])->1+longitud(T).
 
 
 

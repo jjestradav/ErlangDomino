@@ -1,5 +1,5 @@
 -module(proyecto2).
--export([push/2,pop/1,carte/1,k_esimo/2,random/2,generarlista/2,longitud/1,estavacia/1,reverse/1,isvalid/2,pop_elemento/1,stackinicial/3,inicial/2,hijos/3,quita/2,dfs_aux/3,ultimo_elemento/1]).
+-export([carte/1,k_esimo/2,random/2,generarlista/2,longitud/1,estavacia/1,reverse/1,isvalid/2,pop_elemento/1,stackinicial/3,inicial/2,hijos/3,quita/2,dfs_aux/3,ultimo_elemento/1,dfs/2]).
 
 
 
@@ -51,6 +51,9 @@ dfs_aux(_D,[],L)->L;
 dfs_aux(D,[H|T],L)->case longitud(L)=<longitud(H) of
 true->dfs_aux(D,hijos(quita(D,H),H,[])++T,H);        
 false->dfs_aux(D,hijos(quita(D,H),H,[])++T,L) end.
+
+%wrapper de dfs_aux -> dfs(lista de elementos,cantidad de combinaciones).
+dfs(L,N)->X=generarlista(L,N),dfs_aux(X,stackinicial([],X,N),[]).
 
 ultimo_elemento([T])->T;
 ultimo_elemento([_H|T])->ultimo_elemento(T).

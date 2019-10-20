@@ -1,5 +1,5 @@
 -module(proyecto2).
--export([push/2,pop/1,carte/1,k_esimo/2,random/2,generarlista/2,longitud/1,estavacia/1,reverse/1,isvalid/2,pop_elemento/1,stackinicial/3,inicial/2,hijos/3]).
+-export([push/2,pop/1,carte/1,k_esimo/2,random/2,generarlista/2,longitud/1,estavacia/1,reverse/1,isvalid/2,pop_elemento/1,stackinicial/3,inicial/2,hijos/3,quita/2,dfs_aux/3]).
 
 
 push(X,L)->[X|L].
@@ -38,13 +38,9 @@ reverse({H,T})->{T,H}.
 isvalid({_A,B},{B,_X})->0;
 isvalid({_,_},[])->1;
 isvalid([],[])->1;
-isvalid({_A,_B},{_X,_Y})->1.
+isvalid({_A,_B},{_X,_Y})->1;
+isvalid([],{_,_})->1.
 
-%dfs([],S,_N)->S;
-%dfs([_H|[]],S,_N)->S;
-%%[{1,1} | [{1,2},{1,3},{2,2},{2,3},{3,3}] ]              [{1,2} | [{1,3},{2,2},{2,3},{3,3}] ]
-%dfs([H|T],S,N)->push(H,S), case isvalid(H,pop_elemento(T)) of 
-%true->A=S,L=pop_elemento(A), push([H|lists:append(L,pop_elemento(T))],S) , dfs([pop_elemento(T),pop(T)],S,N)end. 
 
 
 
@@ -55,37 +51,21 @@ inicial([H|_T],1)->[H];
 inicial([_H|T],N)->inicial(T,N-1).
 
 
-dfs_aux(_D,[],_B,L)->L.
-dfs_aux(D,[H|T],B,L)-> case longitud(L)=<longitud(H) of
-true->Hijos=hijos(H,quita(D,H),[]),s         
-%false-> end.
-
 hijos(_L,[],A)->A;
-hijos(L,[H|T],A)-> case isvalid(pop_elemento(L),H) of
-0->hijos(L,T,lists:append(A,[lists:append(L,[H])]));
+hijos(L,[H|T],A)-> case isvalid(H,pop_elemento(L)) of
+0->hijos(L,T,lists:append(A,[lists:append([H],[pop_elemento(L)])]));
 1->hijos(L,T,A)end.
 
-quita([],[])->[];
-quita([],_E)->[];
-quita(_L,[])->[];
+dfs_aux(_D,[],L)->L;
+dfs_aux(D,[H|T],L)->case longitud(L)=<longitud(H) of
+true->dfs_aux(D,hijos(quita(D,H),H,[])++T,H);        
+false->dfs_aux(D,hijos(quita(D,H),H,[])++T,L) end.
+
+
+
+
 quita(L,E)->L--E.
 
 
-%dfs([],L,_Z)->L;
-%dfs([H|T],L,Z)when Z==0->
-%C=lists:append(L,lists:append([H],pop_elemento(L))),
-%B=lists:delete(H,[H|T]),
-%E=dfs(B,L,isvalid(H,pop_elemento(T))),
-%Q=lists:append(C,E),
-%Q;
-%dfs([_H|_T],L,Z)when Z==1->L.
 
-%dfs_w([H|T],L)->dfs([H|T],L,isvalid(H,pop_elemento(T))).
- 
-%ejemplo([H|T],0)->X=1,ejemplo([H|T],1);
-%ejemplo([_H|_T],1)->1.	 
-
-%%[{1,1},{1,2},{1,3},{2,2},{2,3},{3,3}] 	
-%recorrer([])->[];
-%recorrer([H|T])when isvalid(H,pop_elemento(T)) ->recorrer[H
 
